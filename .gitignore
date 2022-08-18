@@ -3,6 +3,8 @@
 .import/
 export.cfg
 export_presets.cfg
+#Ignore Godot Builds
+/Build/
 
 # Mono-specific ignores
 .mono/
