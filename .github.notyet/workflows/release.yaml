@@ -1,0 +1,38 @@
+on:
+  release:
+    types: [created, edited]
+jobs:
+  release_html5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HTML
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          file: HTML5.zip
+        env:
+          GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+      - name: release HTML5
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{secrets.BUTLER_CREDENTIALS}}
+          CHANNEL: HTML5
+          ITCH_GAME: ${{secrets.ITCHIO_GAME}}
+          ITCH_USER: somedumbfox
+          PACKAGE: HTML5.zip
+  release_windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Windowsx64
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          file: WINDOWSx64.zip
+        env:
+          GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+      - name: release Windows
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{secrets.BUTLER_CREDENTIALS}}
+          CHANNEL: Windows
+          ITCH_GAME: ${{secrets.ITCHIO_GAME}}
+          ITCH_USER: somedumbfox
+          PACKAGE: WINDOWSx64.zip
