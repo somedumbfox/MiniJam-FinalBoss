@@ -1,4 +1,3 @@
 # MiniJam-FinalBoss
-
-Credits
+## Credits
 TileMap - VladikVT https://opengameart.org/content/tilemap-dungeon-2d
