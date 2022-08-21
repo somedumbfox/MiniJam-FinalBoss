@@ -3,17 +3,19 @@ extends KinematicBody2D
 
 export var SPEED = 7500
 var velocity = Vector2.ZERO setget set_velocity, get_velocity
-var jumpStrength = 50
+var jumpStrength = 30
 var jumped = false
 
 
 var AttackStrength = 1
 var DefenseStrength = 1
 var playerHealth = 10
+var playerAgility = 1.15
 
 var AttackUpgradeIncrement = 2
 var DefenseUpgradeIncrement = 2
 var HealthUpgradIncrement = 5
+var AgilityUpgradeIncrement = .05
 
 
 
@@ -25,12 +27,16 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if($UI/DebugLabel.visible):
-		$UI/DebugLabel.text = "Attack: %d\nDefense: %d\nHealth: %d\n" % [AttackStrength, DefenseStrength, playerHealth]
-	pass
+		$UI/DebugLabel.text = "Attack: %d\nDefense: %d\nHealth: %d\nVelocity: (%d, %d)" % [AttackStrength, DefenseStrength, playerHealth, velocity.x, velocity.y]
+	if(OS.is_debug_build()):
+		if(Input.is_action_just_pressed("reset_platforms")):
+			get_tree().call_group("Upgraders", "enablePlatform")
+		
 
 func _physics_process(delta):
 	move(delta)
 	resetJump()
+	attack()
 	pass
 func set_velocity(value):
 	velocity = value
@@ -41,19 +47,34 @@ func get_velocity():
 func move(delta):
 	var rightMovement:Vector2 = Vector2.ZERO
 	var leftMovement:Vector2 = Vector2.ZERO
-	var gravity:Vector2 = Vector2.DOWN * 2
+	var gravity:Vector2 = Vector2.DOWN * 2  * SPEED
 	if(Input.is_action_pressed("right")):
-		rightMovement.x = 2
+		rightMovement += Vector2.RIGHT * playerAgility * SPEED
+		$AnimatedSprite.flip_h = false
 	if(Input.is_action_pressed("left")):
-		leftMovement.x = -2
+		leftMovement += Vector2.LEFT * playerAgility * SPEED
+		$AnimatedSprite.flip_h = true
 	if(Input.is_action_just_pressed("jump") and !jumped):
-		gravity.y =- jumpStrength
+		gravity = Vector2.UP * playerAgility * jumpStrength * SPEED
 		jumped = true
 	
-	velocity = lerp(velocity, (rightMovement+leftMovement+gravity) * SPEED * delta, .25)
+	velocity = lerp(velocity, (rightMovement+leftMovement+gravity) * delta, .15)
 	
-	velocity = move_and_slide(velocity, Vector2.UP) 
+	velocity = move_and_slide(velocity, Vector2.UP)
+	displaySprite(velocity)
 		
+	pass
+
+func displaySprite(velocity):
+	if(int(velocity.x) == 0 and int(velocity.y) == 0):
+		$AnimatedSprite.play("default")
+	if(int(velocity.x) != 0):
+		$AnimatedSprite.play("default")
+	if(int(velocity.y) > 0):
+		$AnimatedSprite.play("jumpDown")
+	if(int(velocity.y) < 0):
+		$AnimatedSprite.play("jumpUp")
+	
 	pass
 
 func attack():
@@ -71,3 +92,17 @@ func upgradeDefense():
 
 func upgradeHealth():
 	playerHealth += HealthUpgradIncrement
+
+func upgradeAgility():
+	playerAgility = clamp(playerAgility+AgilityUpgradeIncrement, 1.0, 2.0)
+
+
+func _on_AttackPlatform_Upgrade():
+	upgradeAttack()
+
+func _on_HealthPlatform_Upgrade():
+	upgradeHealth()
+	upgradeAgility()
+
+func _on_DefensePlatform_Upgrade():
+	upgradeDefense()

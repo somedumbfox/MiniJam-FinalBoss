@@ -15,18 +15,15 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func _on_Tween_tween_all_completed():
+	get_tree().set_pause(false)
 
-func _on_Right_area_entered(_area):
+func _on_Right_body_entered(body):
 	get_tree().set_pause(true)
 	Tweener.interpolate_property(self, "position", position, Vector2(position.x+512, position.y), .75)
 	Tweener.start()
 
-
-func _on_Tween_tween_all_completed():
-	get_tree().set_pause(false)
-
-
-func _on_Left_area_entered(_area):
+func _on_Left_body_entered(body):
 	get_tree().set_pause(true)
 	Tweener.interpolate_property(self, "position", position, Vector2(position.x-512, position.y), .75)
 	Tweener.start()

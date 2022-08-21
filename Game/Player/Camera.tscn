@@ -10,7 +10,6 @@ pause_mode = 2
 z_index = 999
 current = true
 zoom = Vector2( 0.5, 0.5 )
-smoothing_speed = 7.0
 editor_draw_limits = true
 script = ExtResource( 1 )
 
@@ -20,7 +19,7 @@ collision_layer = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
-position = Vector2( 0, 142 )
+position = Vector2( 8, 140 )
 shape = SubResource( 4 )
 
 [node name="Left" type="Area2D" parent="."]
@@ -29,11 +28,11 @@ collision_layer = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
-position = Vector2( 0, 142 )
+position = Vector2( -8, 140 )
 shape = SubResource( 4 )
 
 [node name="Tween" type="Tween" parent="."]
 
-[connection signal="area_entered" from="Right" to="." method="_on_Right_area_entered"]
-[connection signal="area_entered" from="Left" to="." method="_on_Left_area_entered"]
+[connection signal="body_entered" from="Right" to="." method="_on_Right_body_entered"]
+[connection signal="body_entered" from="Left" to="." method="_on_Left_body_entered"]
 [connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
