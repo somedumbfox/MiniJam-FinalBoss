@@ -5,6 +5,7 @@ export var SPEED = 7500
 var velocity = Vector2.ZERO setget set_velocity, get_velocity
 var jumpStrength = 30
 var jumped = false
+var attackInProgress = false
 
 
 var AttackStrength = 1
@@ -37,7 +38,7 @@ func _physics_process(delta):
 	move(delta)
 	resetJump()
 	attack()
-	pass
+
 func set_velocity(value):
 	velocity = value
 
@@ -61,7 +62,8 @@ func move(delta):
 	velocity = lerp(velocity, (rightMovement+leftMovement+gravity) * delta, .15)
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
-	displaySprite(velocity)
+	if(!attackInProgress):
+		displaySprite(velocity)
 		
 	pass
 
@@ -69,16 +71,17 @@ func displaySprite(velocity):
 	if(int(velocity.x) == 0 and int(velocity.y) == 0):
 		$AnimatedSprite.play("default")
 	if(int(velocity.x) != 0):
-		$AnimatedSprite.play("default")
+		$AnimatedSprite.play("walk")
 	if(int(velocity.y) > 0):
 		$AnimatedSprite.play("jumpDown")
 	if(int(velocity.y) < 0):
 		$AnimatedSprite.play("jumpUp")
-	
 	pass
 
 func attack():
-	pass
+	if(Input.is_action_just_pressed("attack")):
+		attackInProgress = true
+		$AnimationPlayer.play("attack")
 
 func resetJump():
 	if(jumped):
@@ -106,3 +109,18 @@ func _on_HealthPlatform_Upgrade():
 
 func _on_DefensePlatform_Upgrade():
 	upgradeDefense()
+
+
+func _on_AnimatedSprite_animation_finished():
+	if($AnimatedSprite.animation == "spike"):
+		attackInProgress = false
+	pass # Replace with function body.
+
+
+func _on_Area2D_body_entered(body):
+	get_tree().call_group("Enemy", "hit") # Replace with function body.
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if(anim_name == "attack"):
+		attackInProgress = false # Replace with function body.

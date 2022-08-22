@@ -80,6 +80,9 @@ HintDialouge = [ "Upgrade [color=blue]DEFENSE[/color] strength?
 [node name="UpgradeSprite" parent="UpgradePlatforms/DefensePlatform" index="0"]
 animation = "Sheild"
 
+[node name="Platform" parent="UpgradePlatforms/DefensePlatform" index="1"]
+frame = 6
+
 [node name="AnimationPlayer" parent="UpgradePlatforms/DefensePlatform" index="3"]
 anims/FloatingSprite = SubResource( 1 )
 anims/RESET = SubResource( 2 )
@@ -90,7 +93,7 @@ HintDialouge = [ "Upgrade [color=red]ATTACK[/color] strength?
 [i]Make your attacks hit harder[/i]." ]
 
 [node name="Platform" parent="UpgradePlatforms/AttackPlatform" index="1"]
-frame = 7
+frame = 3
 
 [node name="HealthPlatform" parent="UpgradePlatforms" instance=ExtResource( 6 )]
 position = Vector2( 768, 288 )
@@ -102,7 +105,7 @@ HintDialouge = [ "Upgrade [color=green]VITALITY[/color]?
 animation = "health"
 
 [node name="Platform" parent="UpgradePlatforms/HealthPlatform" index="1"]
-frame = 7
+frame = 3
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
 position = Vector2( 32, 288 )

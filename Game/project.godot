@@ -27,6 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Untitled Game"
+run/main_scene="res://Tilemaps/Dungeon.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -135,6 +136,7 @@ reset_platforms={
 2d_physics/layer_2="NPC"
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Floors/Walls"
+2d_physics/layer_5="PlayerAttack"
 
 [physics]
 
